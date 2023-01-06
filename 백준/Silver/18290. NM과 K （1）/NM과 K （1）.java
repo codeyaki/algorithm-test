@@ -1,5 +1,4 @@
 import java.io.*;
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +13,7 @@ public class Main {
     private static int k;
     private static int[][] map;
     private static int maxSum = Integer.MIN_VALUE;
+    private static boolean[][] visitedPoint;
     private static List<Pair> selectPointList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
@@ -22,11 +22,12 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
         map = new int[n][m];
+        visitedPoint = new boolean[n][m];
         for (int i = 0; i < n; i++) {
             map[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         }
         // dfs 돌리기
-        dfs(0, 0, 0);
+        dfs(new Pair(0, 0), 0, 0);
         // 출력
         bw.append(String.valueOf(maxSum));
         bw.flush();
@@ -34,13 +35,9 @@ public class Main {
         br.close();
     }
 
-    private static void dfs(int x, int y, int count) {
+    private static void dfs(Pair point, int count, int sum) {
         // 블록선택개수(count)가 k개 이상인 경우 합이 최대 값인지 확인
         if (count >= k) {
-            int sum = 0;
-            for (Pair pair : selectPointList) {
-                sum += pair.getValue();
-            }
             maxSum = maxSum < sum ? sum : maxSum;
             return;
         }
@@ -48,49 +45,43 @@ public class Main {
         // 모든 점을 돌면서 확인하기
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
+                // 확인할 좌표
+                Pair pair = new Pair(i, j);
                 // 불가능 하다면 넘기기
-                if (!checkSelectedPoint(i, j)) {
+                if (!checkSelectedPoint(pair)) {
                     continue;
                 }
-                selectPointList.add(new Pair(i, j));
-                dfs(i, j, count + 1);
-                selectPointList.remove(count);
-
+                visitedPoint[i][j] = true;
+                dfs(pair, count + 1, sum + pair.getValue());
+                visitedPoint[i][j] = false;
             }
-
         }
 
     }
 
-    private static boolean checkSelectedPoint(int i, int j) {
-        // 선택한 모든 점을 돌며 가능한지 확인
-        for (Pair pair : selectPointList) {
-            // 해당 점
-            if (i == pair.x && j == pair.y) {
-                return false;
+    private static boolean checkSelectedPoint(Pair point) {
+        // 해당 점의 상하좌우의 점이 이미 방문한 점이면 방문할수 없다.
+        int dx[] = new int[]{0, 1, -1, 0, 0};
+        int dy[] = new int[]{0, 0, 0, 1, -1};
+        for (int i = 0; i < 5; i++) {
+            int movedX = point.getX() + dx[i];
+            int movedY = point.getY() + dy[i];
+            if (movedX < 0  // 아래로 이동했을때 음수면 이동할 필요가 없음
+                    || movedX >= n // 위로 이동했을때 n 이상이면 이동할 필요가 없음
+                    || movedY < 0 // 왼쪽으로 이동했을때 음수면 이동할 필요가 없음
+                    || movedY >= m // 오른쪽으로 이동했을때 m 이상이면 이동할 필요가 없음
+            ) {
+                continue;
             }
-            // 상
-            if (i == pair.x + 1 && j == pair.y) {
-                return false;
-            }
-            // 하
-            if (i == pair.x - 1 && j == pair.y) {
-                return false;
-            }
-            // 좌
-            if (i == pair.x && j == pair.y - 1) {
-                return false;
-            }
-            // 우
-            if (i == pair.x && j == pair.y + 1) {
+            if (visitedPoint[movedX][movedY]) {
                 return false;
             }
         }
+        // 방문했던 점이 아니라면
         return true;
-
     }
 
-    static class Pair{
+    static class Pair {
         private int x;
         private int y;
 
@@ -100,15 +91,17 @@ public class Main {
         }
 
         public int getX() {
-            return x;
+            return this.x;
         }
 
         public int getY() {
-            return y;
+            return this.y;
         }
 
         public int getValue() {
             return map[this.x][this.y];
         }
     }
+
+
 }
