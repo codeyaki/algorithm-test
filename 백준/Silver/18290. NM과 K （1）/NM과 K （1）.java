@@ -14,7 +14,6 @@ public class Main {
     private static int[][] map;
     private static int maxSum = Integer.MIN_VALUE;
     private static boolean[][] visitedPoint;
-    private static List<Pair> selectPointList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -27,7 +26,7 @@ public class Main {
             map[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         }
         // dfs 돌리기
-        dfs(new Pair(0, 0), 0, 0);
+        dfs(0, 0, 0, 0);
         // 출력
         bw.append(String.valueOf(maxSum));
         bw.flush();
@@ -35,7 +34,7 @@ public class Main {
         br.close();
     }
 
-    private static void dfs(Pair point, int count, int sum) {
+    private static void dfs(int x, int y, int count, int sum) {
         // 블록선택개수(count)가 k개 이상인 경우 합이 최대 값인지 확인
         if (count >= k) {
             maxSum = maxSum < sum ? sum : maxSum;
@@ -46,26 +45,25 @@ public class Main {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 // 확인할 좌표
-                Pair pair = new Pair(i, j);
                 // 불가능 하다면 넘기기
-                if (!checkSelectedPoint(pair)) {
+                if (!checkSelectedPoint(i, j)) {
                     continue;
                 }
                 visitedPoint[i][j] = true;
-                dfs(pair, count + 1, sum + pair.getValue());
+                dfs(i, j, count + 1, sum + map[i][j]);
                 visitedPoint[i][j] = false;
             }
         }
 
     }
 
-    private static boolean checkSelectedPoint(Pair point) {
+    private static boolean checkSelectedPoint(int x, int y) {
         // 해당 점의 상하좌우의 점이 이미 방문한 점이면 방문할수 없다.
         int dx[] = new int[]{0, 1, -1, 0, 0};
         int dy[] = new int[]{0, 0, 0, 1, -1};
         for (int i = 0; i < 5; i++) {
-            int movedX = point.getX() + dx[i];
-            int movedY = point.getY() + dy[i];
+            int movedX = x + dx[i];
+            int movedY = y + dy[i];
             if (movedX < 0  // 아래로 이동했을때 음수면 이동할 필요가 없음
                     || movedX >= n // 위로 이동했을때 n 이상이면 이동할 필요가 없음
                     || movedY < 0 // 왼쪽으로 이동했을때 음수면 이동할 필요가 없음
@@ -80,28 +78,5 @@ public class Main {
         // 방문했던 점이 아니라면
         return true;
     }
-
-    static class Pair {
-        private int x;
-        private int y;
-
-        Pair(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public int getX() {
-            return this.x;
-        }
-
-        public int getY() {
-            return this.y;
-        }
-
-        public int getValue() {
-            return map[this.x][this.y];
-        }
-    }
-
 
 }
