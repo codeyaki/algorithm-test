@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -42,8 +40,9 @@ public class Main {
         }
 
         // 모든 점을 돌면서 확인하기
-        for (int i = 0; i < n; i++) {
+        for (int i = x; i < n; i++) {
             for (int j = 0; j < m; j++) {
+
                 // 확인할 좌표
                 // 불가능 하다면 넘기기
                 if (!checkSelectedPoint(i, j)) {
@@ -64,14 +63,12 @@ public class Main {
         for (int i = 0; i < 5; i++) {
             int movedX = x + dx[i];
             int movedY = y + dy[i];
-            if (movedX < 0  // 아래로 이동했을때 음수면 이동할 필요가 없음
-                    || movedX >= n // 위로 이동했을때 n 이상이면 이동할 필요가 없음
-                    || movedY < 0 // 왼쪽으로 이동했을때 음수면 이동할 필요가 없음
-                    || movedY >= m // 오른쪽으로 이동했을때 m 이상이면 이동할 필요가 없음
+            if (movedX >= 0  // 아래로 이동했을때 음수면 이동할 필요가 없음
+                    && movedX < n // 위로 이동했을때 n 이상이면 이동할 필요가 없음
+                    && movedY >= 0 // 왼쪽으로 이동했을때 음수면 이동할 필요가 없음
+                    && movedY < m // 오른쪽으로 이동했을때 m 이상이면 이동할 필요가 없음
+                    && visitedPoint[movedX][movedY]
             ) {
-                continue;
-            }
-            if (visitedPoint[movedX][movedY]) {
                 return false;
             }
         }
