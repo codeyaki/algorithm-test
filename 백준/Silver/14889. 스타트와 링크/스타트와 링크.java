@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.Arrays;
+import java.util.StringTokenizer;
 
 
 public class Main {
@@ -9,66 +9,56 @@ public class Main {
 
     // 총 인원수
     private static int n;
-    // 능력치 저장
-    private static int[][] status;
-    // 선수 선택 여부 저장
-    private static boolean[] selectedArray;
-    // 팀 점수 차이가 가장 최소의 경우 차이 저장
+    // 가로 합
+    private static int[] sumRow;
+    // 세로 합
+    private static int[] sumColumn;
+    // 답 출력용 변수
     private static int result = Integer.MAX_VALUE;
 
 
     public static void main(String[] args) throws IOException {
         // 입력
         n = Integer.parseInt(br.readLine().trim());
-        status = new int[n][n];
-        selectedArray = new boolean[n];
+        sumRow = new int[n];
+        sumColumn = new int[n];
+        int sumTotal = 0;
         for (int i = 0; i < n; i++) {
-            status[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < n; j++) {
+                int num = Integer.parseInt(st.nextToken());
+                sumTotal += num;
+                sumRow[i] += num;
+                sumColumn[j] += num;
+            }
         }
 
         // 풀이
-        selectMember(0, 0);
+        selectMember(0, 0, sumTotal);
         bw.append(String.valueOf(result));
+
         // 출력
         bw.flush();
         bw.close();
         br.close();
     }
 
-    private static void selectMember(int index, int count) {
+    private static void selectMember(int index, int count, int sumTotal) {
+        // 팀원 구성이 완료된 경우
         if (count == n / 2) {
-            result = Math.min(result, checkScore());
+            result = Math.min(result, Math.abs(sumTotal));
             return;
         }
-        // 팀원 선택
-        for (int i = index; i < n; i++) {
-            if (!selectedArray[i]) {
-                selectedArray[i] = true;
-                selectMember(i, count + 1);
-                selectedArray[i] = false;
-            }
+        // 팀원 구성이 되지 않을 채 index에 도달했을 경우
+        if (index == n) {
+            return;
         }
+        // 해당 index에서는 두가지의 경우의 수가 있음
+        // 해당 멤버를 선택하는 경우
+        selectMember(index + 1, count + 1, sumTotal - sumRow[index] - sumColumn[index]);
+        // 해당 멤버를 선택하지 않는 경우
+        selectMember(index + 1, count, sumTotal);
     }
 
-    private static int checkScore() {
-        for (boolean b : selectedArray) {
-        }
-        int team1 = 0;
-        int team2 = 0;
-        // 한명씩 돌아가면서 각 팀 점수 계산
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j < n; j++) {
-                // 선수 i와 선수 j가 같은 팀인 경우
-                if (selectedArray[i] && selectedArray[j]) {
-                    team1 += status[i][j] + status[j][i];
-                }
-                if (!selectedArray[i] && !selectedArray[j]) {
-                    team2 += status[i][j] + status[j][i];
-                }
-            }
-
-        }
-        return Math.abs(team1 - team2);
-    }
 
 }
