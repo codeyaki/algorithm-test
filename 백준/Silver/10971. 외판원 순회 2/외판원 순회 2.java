@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 
 public class Main {
@@ -18,7 +19,10 @@ public class Main {
         cost = new int[n][n];
         visited = new boolean[n];
         for (int i = 0; i < n; i++) {
-            cost[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < n; j++) {
+                cost[i][j] = Integer.parseInt(st.nextToken());
+            }
         }
 
         // 풀이
@@ -58,5 +62,8 @@ public class Main {
             visited[next] = false;
 
         }
+
     }
+
+
 }
