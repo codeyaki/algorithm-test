@@ -21,11 +21,13 @@ public class Main {
         }
         // 2개부턴 계산
         for (int i = 2; i < MAX; i++) {
-            for (int j = 0; j < MAX; j++) {
+            cache[i][0] = 1;
+            for (int j = 1; j < MAX; j++) {
+                cache[i][j] = (cache[i - 1][j] + cache[i][j - 1]) % 1000000000;
                 // i-1 에서 +k를 해서 n이되는 경우들의 합 => i-1에서 j-k의 위치
-                for (int k = 0; k <= j; k++) {
-                    cache[i][j] = (cache[i][j] + cache[i - 1][j - k]) % 1000000000;
-                }
+//                for (int k = 0; k <= j; k++) {
+//                    cache[i][j] = (cache[i][j] + cache[i - 1][j - k]) % 1000000000;
+//                }
             }
         }
         bw.append(String.valueOf(cache[k][n]));
