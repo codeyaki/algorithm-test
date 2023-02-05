@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         StringTokenizer st = new StringTokenizer(br.readLine());
-        long A = Integer.parseInt(st.nextToken()), B = Integer.parseInt(st.nextToken());
+        int A = Integer.parseInt(st.nextToken()), B = Integer.parseInt(st.nextToken());
         bw.append(String.valueOf((A + B) * (A - B)));
         bw.flush();
         bw.close();
