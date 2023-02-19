@@ -1,10 +1,9 @@
-import java.util.stream.Collectors;
-
+import java.util.*;
 class Solution {
     public String solution(String my_string) {
-        return my_string.chars()
-                .mapToObj(Character::toString)
-                .distinct()
-                .collect(Collectors.joining());
+        String[] answer = my_string.split("");
+        Set<String> set = new LinkedHashSet<String>(Arrays.asList(answer));
+
+        return String.join("", set);
     }
 }
