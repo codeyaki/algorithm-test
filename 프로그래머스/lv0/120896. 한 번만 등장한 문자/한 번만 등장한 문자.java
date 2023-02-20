@@ -2,21 +2,13 @@ import java.util.*;
 
 class Solution {
     public String solution(String s) {
-        Map<Character, Integer> cntStrMap = new HashMap<>();
+        int[] cntBook = new int['z' - 'a' + 1];
         for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            Integer cntC = cntStrMap.getOrDefault(c, 0);
-            cntStrMap.put(c, ++cntC);
+            cntBook[s.charAt(i) - 'a']++;
         }
-        Set<Character> keySet = cntStrMap.keySet();
-        List<Character> notDuplicatedList = new ArrayList<>();
-        for (char key : keySet) {
-            if(cntStrMap.get(key) == 1) notDuplicatedList.add(key);
-        }
-        Collections.sort(notDuplicatedList);
         StringBuilder answer = new StringBuilder();
-        for (char c : notDuplicatedList) {
-            answer.append(c);
+        for(int i = 0; i < cntBook.length; i++){
+            if(cntBook[i] == 1) answer.append((char) (i + 'a'));
         }
         return answer.toString();
     }
