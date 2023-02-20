@@ -1,15 +1,8 @@
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 class Solution {
     public int solution(int[] array, int n) {
-        Arrays.sort(array);
-        int[] minDif = {Integer.MAX_VALUE, Integer.MAX_VALUE};
-        for (int i = 0; i < array.length; i++) {
-            if(minDif[1] > Math.abs(array[i] - n)){
-                minDif[0] = array[i];
-                minDif[1] = Math.abs(array[i] - n);
-            }
-        }
-        return minDif[0];
+        return Math.min(array[Arrays.stream(array).map(operand -> Math.abs(n - operand)).boxed().collect(Collectors.toList()).indexOf(Arrays.stream(array).map(operand -> Math.abs(n - operand)).min().orElse(0))], array[Arrays.stream(array).map(operand -> Math.abs(n - operand)).boxed().collect(Collectors.toList()).lastIndexOf(Arrays.stream(array).map(operand -> Math.abs(n - operand)).min().orElse(0))]);
     }
 }
