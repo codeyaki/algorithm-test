@@ -1,25 +1,18 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
+
+    int[] dp = new int[3000003];
+    int INF = 1000002;
+
     public int solution(int x, int y, int n) {
-        int[] cache = new int[y + 1];
-        for (int i = 0; i < x; i++) {
-            cache[i] = -1;
+        int answer = 0;
+        Arrays.fill(dp, INF);
+        dp[x] = -1;
+        dp[y] = 0;
+        for(int num = Math.max(y - n, Math.max(y / 2, y / 3)); num >= x; num--){
+            dp[num] = Math.min(dp[num + n] + 1, Math.min(dp[num * 2] + 1, dp[num * 3] + 1));
         }
-        cache[x] = 0;
-        for (int i = x + 1; i < y + 1; i++) {
-            int[] tmpResult = {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE};
-            // 2 곱하기
-            if (i % 2 == 0 && cache[i / 2] >= 0) tmpResult[0] = cache[i / 2] + 1;
-            // 3 곱하기
-            if (i % 3 == 0 && cache[i / 3] >= 0) tmpResult[1] = cache[i / 3] + 1;
-            // n 더하기
-            if (i - n >= 0 && cache[i - n] >= 0) tmpResult[2] = cache[i - n] + 1;
-            int min = Arrays.stream(tmpResult).min().getAsInt();
-            cache[i] = min == Integer.MAX_VALUE ? -1 : min;
-        }
-
-
-        return cache[y];
+        return dp[x] >= INF ? -1 : dp[x];
     }
 }
