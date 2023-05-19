@@ -45,34 +45,21 @@ class Solution {
     public int[] getAnswer() {
         int[] result = new int[n];
         // 위상정렬 bfs
-        Queue<Integer> que = new LinkedList<>();
+        PriorityQueue<Integer> que = new PriorityQueue<>((o1, o2) -> o1 - o2);
         // inDegree가 0인것중 가장 낮은것
-        que.add(findMinNode());
+        for(int i = 1; i < n + 1; i++){
+            if(inDegreeArr[i] == 0) que.add(i);
+        }
         int idx = 0;
         while (!que.isEmpty()) {
             int node = que.poll();
             result[idx++] = node;
             for (Integer next : graph[node]) {
                 inDegreeArr[next] = Math.max(inDegreeArr[next] - 1, 0);
+                if(inDegreeArr[next] == 0) que.add(next);
             }
-            // 다음 노드 삽입
-            int nextNode = findMinNode();
-            if (nextNode == -1) continue;
-            que.add(nextNode);
         }
         return result;
-    }
-
-    private int findMinNode() {
-        // inDegree가 0인것중 가장 낮은것 찾기
-        for (int i = 1; i < n + 1; i++) {
-            if (visited[i]) continue;
-            if (inDegreeArr[i] == 0) {
-                visited[i] = true;
-                return i;
-            }
-        }
-        return -1;
     }
 
 }
