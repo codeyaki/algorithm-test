@@ -1,27 +1,17 @@
-import java.util.*;
-
-class Solution {    
+class Solution {
     public int solution(int[] topping) {
-        int n = topping.length;
-        // 왼쪽 가지수 누적합
-        int[] countLeft = new int[n];
-        Set<Integer> setLeft = new HashSet<>();
-        // 오른쪽 가지수 누적합
-        int[] countRight = new int[n];
-        Set<Integer> setRight = new HashSet<>();
-        
-        for(int i = 0; i < n - 1; i++) {
-            setLeft.add(topping[i]);
-            setRight.add(topping[n - i - 1]);
-            countLeft[i] = setLeft.size();
-            countRight[n - i - 2] = setRight.size();
-        }
-        
         int answer = 0;
-        for(int i = 0; i < n - 1; i++){
-            if(countLeft[i] == countRight[i]) answer++;
+        int[] left = new int[10001], right = new int[10001];
+        int ls = 0, rs = 0;
+        for(var i : topping) right[i]++;
+        for(var i : right) rs += i > 0 ? 1 : 0;
+        for(var i : topping) {
+            right[i]--;
+            if (right[i] == 0) rs--;
+            if (left[i] == 0) ls++;
+            left[i]++;
+            if (rs == ls) answer++;
         }
-        
         return answer;
     }
 }
