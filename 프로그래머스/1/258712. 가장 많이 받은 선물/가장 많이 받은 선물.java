@@ -9,6 +9,7 @@ class Solution {
         }
         
         int[][] giftBoard = new int[n][n];
+        int[] giftScore = new int[n];
         for(String gift : gifts) {
             StringTokenizer st = new StringTokenizer(gift);
             String from = st.nextToken();
@@ -16,16 +17,10 @@ class Solution {
             int fromIndex = friendMap.get(from);
             int toIndex = friendMap.get(to);
             giftBoard[fromIndex][toIndex]++;
+            giftScore[fromIndex]++;
+            giftScore[toIndex]--;
         }
         
-        int[] giftScore = new int[n];
-        // 선물 지수 계산
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) {
-                giftScore[i] += giftBoard[i][j] - giftBoard[j][i];
-            }
-        }
-        // 선물을 주고받지 않은 경우나 같은 경우
         int[] giftReceive = new int[n];
         for(int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
