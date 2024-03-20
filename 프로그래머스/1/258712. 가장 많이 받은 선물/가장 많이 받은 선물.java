@@ -22,6 +22,7 @@ class Solution {
         }
         
         int[] giftReceive = new int[n];
+        int answer = 0;
         for(int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 if(giftBoard[i][j] > giftBoard[j][i]) giftReceive[i]++;
@@ -32,15 +33,8 @@ class Solution {
                     else if(giftScore[i] < giftScore[j]) giftReceive[j]++;
                 }
             }
+            answer = Math.max(answer, giftReceive[i]);
         }
-        return getMax(giftReceive);
-    }
-    
-    private int getMax(int[] arr) {
-        int max = 0;
-        for(int num : arr) {
-            max = Math.max(num, max);
-        }
-        return max;
+        return answer;
     }
 }
