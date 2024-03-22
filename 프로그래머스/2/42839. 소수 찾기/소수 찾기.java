@@ -7,7 +7,6 @@ class Solution {
     public int solution(String numbers) {
         isVisited = new boolean[numbers.length()];
         dfs(0, "", numbers.split(""));
-        System.out.println(numberSet);
         int max = getMaxNum(numberSet);
         isNotPrime = new boolean[max + 1];
         checkPrime(max);
