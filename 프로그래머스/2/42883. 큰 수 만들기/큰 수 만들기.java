@@ -4,18 +4,19 @@ class Solution {
         Stack<Integer> stack = new Stack<>();
         for(int i = 0; i < number.length(); i++) {
             int num = number.charAt(i) - 48;
-            while(!stack.isEmpty() && stack.peek() < num && k > 0) {
-                k--;
+            while(k > 0 && !stack.isEmpty() && stack.peek() < num) {
                 stack.pop(); 
+                k--;
             }
             stack.push(num);
         }
         // 모두 종료후 k가 남아있다면 맨뒤에서 빼주기
-        
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < stack.size() - k; i++) {
-            sb.append(stack.get(i));
+        for(int i = 0; i < k; i++) {
+            stack.pop();
         }
-        return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty()) sb.append(String.valueOf(stack.pop()));
+        String answer = sb.reverse().toString();
+        return answer;
     }
 }
