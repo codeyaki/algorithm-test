@@ -11,12 +11,10 @@ class Solution {
             stack.push(num);
         }
         // 모두 종료후 k가 남아있다면 맨뒤에서 빼주기
-        for(int i = 0; i < k; i++) {
-            stack.pop();
-        }
         StringBuilder sb = new StringBuilder();
-        while(!stack.isEmpty()) sb.append(String.valueOf(stack.pop()));
-        String answer = sb.reverse().toString();
-        return answer;
+        for(int i = 0; i < stack.size() - k; i++) {
+            sb.append(stack.get(i));
+        }
+        return sb.toString();
     }
 }
