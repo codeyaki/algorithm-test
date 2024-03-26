@@ -14,7 +14,7 @@ class Solution {
         long target = (sum1 + sum2) / 2;
         while(sum1 != target) {
             answer++;
-            if(answer > queue1.length * 4) return -1;
+            if(answer > queue1.length * 3) return -1;
             if(sum1 > target) {
                 int num = que1.poll();
                 sum1 -= num;
