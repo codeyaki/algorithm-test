@@ -2,10 +2,6 @@ class Solution {
     int[] board;
     int n;
     int answer = 0;
-    boolean[] cols;
-    boolean[] diag1;
-    boolean[] diag2;
-
     public int solution(int n) {
         init(n);
         dfs(0);
@@ -13,35 +9,42 @@ class Solution {
     }
     
     private void dfs(int row) {
-        if (row == n) {
+        if(row == n) {
             answer++;
             return;
         }
-        for (int col = 0; col < n; col++) {
-            if (cols[col] || diag1[row - col + n - 1] || diag2[row + col]) {
+        for (int j = 0; j < n; j++) {
+            board[row] = j;
+            // 현재 있는곳에 두기 가능한지 확인
+            if(!canPlaceQueen(row)) {
+                board[row] = -1;
                 continue;
             }
-            board[row] = col;
-            cols[col] = true;
-            diag1[row - col + n - 1] = true;
-            diag2[row + col] = true;
+            // 되면 다음 수 두기
             dfs(row + 1);
-            cols[col] = false;
-            diag1[row - col + n - 1] = false;
-            diag2[row + col] = false;
+            board[row] = -1;
         }
+        
+    }
+    
+    private boolean canPlaceQueen(int x) {
+        for(int i = 0; i < x; i++) {
+            if(board[x] == board[i]) return false;
+            if(Math.abs((float) (board[x] - board[i]) / (x - i)) == 1.0) return false;
+        }
+        return true;
     }
     
     private void init(int n) { 
         this.board = new int[n];
-        this.cols = new boolean[n];
-        this.diag1 = new boolean[2 * n - 1];
-        this.diag2 = new boolean[2 * n - 1];
+        for(int i = 0; i < n; i++) {
+            this.board[i] = -1;
+        }
         this.n = n;
     }
     
     private void printBoard() {
-        for (int i = 0; i < n; i++) {
+        for(int i = 0; i < n; i++) {
             System.out.print(board[i] + ", ");
         }
         System.out.println();
